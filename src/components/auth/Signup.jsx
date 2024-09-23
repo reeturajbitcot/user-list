@@ -1,6 +1,9 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { createUser } from "../../store/slice/authSlice";
+import Swal from "sweetalert2";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -9,12 +12,35 @@ function Signup() {
   const [city, setCity] = useState("");
   const [phoneNo, setPhoneNo] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userAuth);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (email && password) {
-      console.log(email, password);
+    let userData = {
+      name,
+      email,
+      password,
+      city,
+      phoneNumber: phoneNo,
+    };
+    try {
+      const resultAction = dispatch(createUser(userData));
+      if (createUser.fulfilled.match(resultAction)) {
+        Swal.fire({
+          title: "Successful",
+          text: "User Created successfully",
+          icon: "success",
+          confirmButtonText: "Close",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            loginClick();
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

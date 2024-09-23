@@ -1,25 +1,43 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../store/slice/authSlice";
+import Swal from "sweetalert2";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userAuth);
+
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    setEmailError(false);
-    setPasswordError(false);
+    let userData = {
+      email,
+      password,
+    };
 
-    if (email == "") {
-      setEmailError(true);
-    }
-    if (password == "") {
-      setPasswordError(true);
+    try {
+      const resultAction = dispatch(loginUser(userData));
+      console.log(resultAction.fulfilled.match(resultAction));
+      if (loginUser.fulfilled.match(resultAction)) {
+        Swal.fire({
+          title: "Successful",
+          text: "User Created successfully",
+          icon: "success",
+          confirmButtonText: "Close",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/dashboard");
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     if (email && password) {
@@ -70,7 +88,6 @@ function Login() {
             sx={{ mb: 3 }}
             fullWidth
             value={email}
-            error={emailError}
           />
           <TextField
             label="Password"
@@ -80,7 +97,6 @@ function Login() {
             color="secondary"
             type="password"
             value={password}
-            error={passwordError}
             fullWidth
             sx={{ mb: 3 }}
           />

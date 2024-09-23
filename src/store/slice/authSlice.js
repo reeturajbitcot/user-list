@@ -33,7 +33,23 @@ export const createUser = createAsyncThunk(
         url: `${url}/add`,
         data: data,
       });
-      return res;
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  "userAuth/loginUser",
+  async (data) => {
+    try {
+      const res = await axios({
+        method: "post",
+        url: `${url}/login`,
+        data,
+      });
+      return res.data;
     } catch (error) {
       console.log(error);
     }
@@ -62,23 +78,9 @@ export const updateUser = createAsyncThunk(
       const res = await axios({
         method: "put",
         url: `${url}/update/${id}`,
+        data,
       });
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
-
-export const loginUser = createAsyncThunk(
-  "userAuth/loginUser",
-  async (data) => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${url}/login`,
-      });
-      return res;
+      return res.data;
     } catch (error) {
       console.log(error);
     }

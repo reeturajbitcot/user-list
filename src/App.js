@@ -21,7 +21,6 @@ const ProtectedRoute = ({ user, redirectPath = "/" }) => {
 
 function App() {
   const isUserLoggedIn = useSelector((state) => state.auth.isAuthenticated);
-  console.log(isUserLoggedIn);
 
   return (
     <Router>

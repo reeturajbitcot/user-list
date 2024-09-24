@@ -15,7 +15,7 @@ function Signup() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userAuth);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     let userData = {
@@ -26,11 +26,12 @@ function Signup() {
       phoneNumber: phoneNo,
     };
     try {
-      const resultAction = dispatch(createUser(userData));
+      const resultAction = await dispatch(createUser(userData));
+      console.log(resultAction);
       if (createUser.fulfilled.match(resultAction)) {
         Swal.fire({
           title: "Successful",
-          text: "User Created successfully",
+          text: "User Created successfully! Redirecting to Login",
           icon: "success",
           confirmButtonText: "Close",
         }).then((result) => {

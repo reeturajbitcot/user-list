@@ -9,11 +9,12 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userAuth);
-
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
-  const handleSubmit = (event) => {
+  console.log(user);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     let userData = {
@@ -22,26 +23,31 @@ function Login() {
     };
 
     try {
-      const resultAction = dispatch(loginUser(userData));
-      console.log(resultAction.fulfilled.match(resultAction));
+      const resultAction = await dispatch(loginUser(userData));
+      // console.log(resultAction);
       if (loginUser.fulfilled.match(resultAction)) {
-        Swal.fire({
-          title: "Successful",
-          text: "User Created successfully",
-          icon: "success",
-          confirmButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate("/dashboard");
-          }
-        });
+        if (resultAction.payload) {
+          Swal.fire({
+            title: "Successful",
+            text: "User Created successfully",
+            icon: "success",
+            confirmButtonText: "Close",
+            timer: 1500,
+            timerProgressBar: true,
+          }).then((result) => {
+            if (
+              result.isConfirmed ||
+              result.dismiss === Swal.DismissReason.timer
+            ) {
+              navigate("/dashboard");
+            }
+          });
+        } else {
+          console.log("something went wrong");
+        }
       }
     } catch (error) {
       console.log(error);
-    }
-
-    if (email && password) {
-      console.log(email, password);
     }
   };
 

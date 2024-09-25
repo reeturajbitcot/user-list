@@ -1,4 +1,4 @@
-export const columns = [
+export const createColumns = (handleOpen, handleDelete) => [
   {
     field: "name",
     headerName: "First name",
@@ -37,7 +37,7 @@ export const columns = [
         }}
       >
         <button
-          onClick={() => console.log(params.row)}
+          onClick={() => handleOpen(params.row._id)}
           style={{
             padding: "5px 10px",
             backgroundColor: "orange",
@@ -50,7 +50,7 @@ export const columns = [
           Edit
         </button>
         <button
-          onClick={() => console.log(params.row)}
+          onClick={() => handleDelete(params.row._id)}
           style={{
             padding: "5px 10px",
             backgroundColor: "red",

@@ -27,7 +27,6 @@ function Signup() {
     };
     try {
       const resultAction = await dispatch(createUser(userData));
-      console.log(resultAction);
       if (createUser.fulfilled.match(resultAction)) {
         Swal.fire({
           title: "Successful",

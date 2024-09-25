@@ -13,5 +13,4 @@ export const handleLoginFulfilled = (state, action) => {
 export const handlLoginRejected = (state, action) => {
   state.isLoading = false;
   state.error = action.error.message;
-  console.log(action.error);
 };

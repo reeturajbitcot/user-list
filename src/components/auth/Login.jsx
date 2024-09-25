@@ -12,8 +12,6 @@ function Login() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
-  console.log(user);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -24,27 +22,31 @@ function Login() {
 
     try {
       const resultAction = await dispatch(loginUser(userData));
-      // console.log(resultAction);
-      if (loginUser.fulfilled.match(resultAction)) {
-        if (resultAction.payload) {
-          Swal.fire({
-            title: "Successful",
-            text: "User Created successfully",
-            icon: "success",
-            confirmButtonText: "Close",
-            timer: 1500,
-            timerProgressBar: true,
-          }).then((result) => {
-            if (
-              result.isConfirmed ||
-              result.dismiss === Swal.DismissReason.timer
-            ) {
-              navigate("/dashboard");
-            }
-          });
-        } else {
-          console.log("something went wrong");
-        }
+      if (resultAction.hasOwnProperty("error")) {
+        Swal.fire({
+          title: "Oops...",
+          text: "User Not found",
+          icon: "error",
+          confirmButtonText: "Close",
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      } else {
+        Swal.fire({
+          title: "Successful",
+          text: "User Created successfully",
+          icon: "success",
+          confirmButtonText: "Close",
+          timer: 1500,
+          timerProgressBar: true,
+        }).then((result) => {
+          if (
+            result.isConfirmed ||
+            result.dismiss === Swal.DismissReason.timer
+          ) {
+            navigate("/dashboard");
+          }
+        });
       }
     } catch (error) {
       console.log(error);

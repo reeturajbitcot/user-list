@@ -5,7 +5,6 @@ export const handleFetchContentPending = (state) => {
 export const handleFetchContentFulfilled = (state, action) => {
   state.isLoading = false;
   state.contents = action.payload;
-  console.log(action.payload);
 };
 
 export const handleFetchContentRejected = (state, action) => {
